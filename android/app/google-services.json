@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "717430067305",
+    "project_id": "axios-530ed",
+    "storage_bucket": "axios-530ed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:717430067305:android:bf25bfd423418b738392f8",
+        "android_client_info": {
+          "package_name": "com.billi.society_manager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "717430067305-dksu0hhag5tutdifj5apv3uaonsus2mq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdj9y5YuKEQ7K1Cl5r5ZUDl0SzyBmYCsk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "717430067305-dksu0hhag5tutdifj5apv3uaonsus2mq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
