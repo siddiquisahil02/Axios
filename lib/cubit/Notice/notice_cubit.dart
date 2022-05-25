@@ -12,23 +12,18 @@ class NoticeCubit extends Cubit<NoticeState> {
   void getData()async{
     try{
       emit(NoticeLoading());
-
       final String resId = box.read('resId')??"N.A";
-
       List<NoticeModel> listData = [];
-
       final res = await firebase
           .collection('operationalAt')
           .doc(resId)
           .collection('notice')
           .orderBy('createdAt',descending: true)
           .get();
-
       for (var element in res.docs){
         NoticeModel model = NoticeModel.fromJson(element.data());
         listData.add(model);
       }
-
       emit(NoticeInitial(listData: listData));
     }on FirebaseException catch(e){
       if(e.code == 'unavailable'){

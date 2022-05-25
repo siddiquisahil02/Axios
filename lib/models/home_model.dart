@@ -27,7 +27,7 @@ class HomeModel {
   late final String residenceId;
 
   HomeModel.fromJson(Map<String, dynamic> json){
-    dues = json['dues'];
+    dues = json['dues'].toDouble();
     createdAt = json['createdAt'];
     uid = json['uid'];
     role = json['role'];

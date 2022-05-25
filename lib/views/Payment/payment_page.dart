@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -35,12 +36,11 @@ class _PaymentPageState extends State<PaymentPage> {
     options = {
       'key': razorPayId,
       'amount': widget.data['totalAmount'],
-      'name': 'Sunrise Farms',
+      'name': 'Axios',
       'currency': 'INR',
       'order_id': widget.data['orderID'],
       'description': 'Payment for Rs.${widget.data['totalAmount']}/-',
       'prefill': {
-        'contact': widget.data['phoneNumber'],
         'name': widget.data['name'],
         'email':widget.data['email']
       }
@@ -50,19 +50,37 @@ class _PaymentPageState extends State<PaymentPage> {
 
   void _handlePaymentSuccess(PaymentSuccessResponse response)async{
     Fluttertoast.showToast(msg: "Payment Successful");
-    widget.data['paymentDetails'] = {
-      'paymentID':response.paymentId,
-      'paymentSignature':response.signature
-    };
-    await firebase.collection('allOrders').doc(widget.data['orderID']).set(widget.data);
+
+    await firebase
+        .collection('users')
+        .doc(auth.currentUser?.uid)
+        .collection('payments')
+        .add(
+      {
+        "paymentID":response.paymentId,
+        "orderID":response.orderId,
+        "signature":response.signature,
+        "createdAt":Timestamp.now(),
+        "amount":(widget.data['totalAmount']/100)
+      }
+    );
+
+    await firebase
+        .collection('users')
+        .doc(auth.currentUser?.uid)
+        .update(
+        {
+          'dues':0
+        }
+    );
 
     setState(() {
       status = 1;
     });
     flutterLocalNotificationsPlugin.show(
         1,
-        "Order placed !",
-        "Your order will be delivered soon.",
+        "Payment Done",
+        "Payment for Rs. ${widget.data['totalAmount']/100} is completed successfully.",
         NotificationDetails(
           android: AndroidNotificationDetails(
             channel.id,
@@ -72,10 +90,9 @@ class _PaymentPageState extends State<PaymentPage> {
             icon: "@mipmap/ic_launcher",
           ),
         ));
-    // Timer(const Duration(seconds: 5),(){
-    //   Navigator.pushNamedAndRemoveUntil(context,'/',(route) => false);
-    //   Navigator.push(context,MaterialPageRoute(builder: (context)=>ThankYouPage(data: widget.data)));
-    // });
+    Timer(const Duration(seconds: 2),(){
+      Navigator.pushNamedAndRemoveUntil(context,'/',(route) => false);
+    });
     //Navigator.pushNamedAndRemoveUntil(context,'/', (route) => false);
     // Do something when payment succeeds
   }
@@ -86,7 +103,7 @@ class _PaymentPageState extends State<PaymentPage> {
     setState(() {
       status = 3;
     });
-    Timer(const Duration(seconds: 3),(){
+    Timer(const Duration(seconds: 2),(){
       Navigator.pushNamedAndRemoveUntil(context,'/',(route) => false);
     });
     // Do something when payment fails
@@ -118,11 +135,7 @@ class _PaymentPageState extends State<PaymentPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset("assets/orderPlaced.gif",
-              width: MediaQuery.of(context).size.width-50,
-            ),
-            const SizedBox(height: 15),
-            Text("Preparing to Place Your Order",
+            Text("Taking you to Home Page",
               style: GoogleFonts.poppins(
                   fontSize: 18,
                   color: Colors.black,
@@ -130,7 +143,7 @@ class _PaymentPageState extends State<PaymentPage> {
               ),
             ),
             const SizedBox(height: 15),
-            const Text("Please Wait 5 Sec. !")
+            const Text("Please Wait 2 Sec. !")
           ],
         );
       default:
@@ -138,10 +151,6 @@ class _PaymentPageState extends State<PaymentPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset("assets/error.gif",
-              width: MediaQuery.of(context).size.width-50,
-            ),
-            const SizedBox(height: 15),
             Text("Payment Failed",
               style: GoogleFonts.poppins(
                   fontSize: 18,
@@ -150,7 +159,7 @@ class _PaymentPageState extends State<PaymentPage> {
               ),
             ),
             const SizedBox(height: 15),
-            const Text("Please Wait 5 Sec. !")
+            const Text("Please Wait 3 Sec. !")
           ],
         );
     }

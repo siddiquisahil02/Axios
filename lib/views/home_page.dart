@@ -97,12 +97,17 @@ class HomePage extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 15),
-                          Text("Pay Now",
-                            style: GoogleFonts.pattaya(
+                          GestureDetector(
+                            onTap: (){
+                              cubit.submitRazorID(context: context, amount: data.dues);
+                            },
+                            child: Text("Pay Now",
+                              style: GoogleFonts.pattaya(
                                 color: Colors.white,
                                 fontSize: 20,
+                              ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),

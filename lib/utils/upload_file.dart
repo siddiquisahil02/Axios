@@ -19,7 +19,7 @@ class UploadFile{
       request.headers['Authorization'] = "Basic ${basicAuth()}";
       request.headers[HttpHeaders.contentTypeHeader] = 'multipart/form-data';
       request.fields['fileName'] = file.name;
-      request.fields['folder'] = '/assignmentBuddy/';
+      request.fields['folder'] = '/Axios/';
       request.files.add(MultipartFile.fromBytes(
         'file',
         await file.readAsBytes(),

@@ -25,13 +25,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   RemoteNotification? notification = message.notification;
   Fluttertoast.showToast(msg: message.data['action']);
-  // List<Map<String,dynamic>> noti = (box.read("noti")??[]).cast<Map<String,dynamic>>()??[];
-  // noti.add({
-  //   "title":notification!.title,
-  //   "body":notification.body,
-  //   "time":DateTime.now().millisecondsSinceEpoch
-  // });
-  // await box.write("noti",noti);
 }
 
 Future<void> main() async {
