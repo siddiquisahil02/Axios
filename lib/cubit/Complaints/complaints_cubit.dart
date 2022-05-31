@@ -40,6 +40,7 @@ class ComplaintsCubit extends Cubit<ComplaintsState> {
     try{
       emit(ComplaintsLoading());
       final String resId = box.read('resId')??"N.A";
+      final String res = box.read('res');
       List<String> imagesUrl = [];
       if(images.isNotEmpty){
         for (var element in images){
@@ -56,6 +57,8 @@ class ComplaintsCubit extends Cubit<ComplaintsState> {
           "category":cat,
           "desc":desc,
           "images":imagesUrl,
+          'status':"Open",
+          'residence': res,
           "createdAt":Timestamp.now()
         }
       );

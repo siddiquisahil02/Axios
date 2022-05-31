@@ -130,13 +130,6 @@ class _MyAppState extends State<MyApp> {
           payload: action,
         );
       }
-      // List<Map<String,dynamic>> noti = (box.read("noti")??[]).cast<Map<String,dynamic>>()??[];
-      // noti.add({
-      //   "title":notification!.title,
-      //   "body":notification.body,
-      //   "time":DateTime.now().millisecondsSinceEpoch
-      // });
-      // await box.write("noti",noti);
     });
 
     FirebaseMessaging.instance.getToken().then(storeToken);
@@ -145,18 +138,22 @@ class _MyAppState extends State<MyApp> {
 
     FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message){
       if(message!=null){
-        String action = message.data['action'];
-        Fluttertoast.showToast(msg:"Initial $action");
-        navigatorKey.currentState?.pushNamed('/approved',arguments: action);
+        String? action = message.data['action'];
+        //Fluttertoast.showToast(msg:"Initial $action");
+        if(action!=null) {
+          navigatorKey.currentState?.pushNamed('/approved',arguments: action);
+        }
       }
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification!.android;
-      String action = message.data['action'];
-      Fluttertoast.showToast(msg: action);
-      navigatorKey.currentState?.pushNamed('/approved',arguments: action);
+      if(message.data['action']!=null){
+        String action = message.data['action'];
+        Fluttertoast.showToast(msg: action);
+        navigatorKey.currentState?.pushNamed('/approved',arguments: action);
+      }
     });
   }
 

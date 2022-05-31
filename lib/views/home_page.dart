@@ -83,9 +83,9 @@ class HomePage extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text("Your Dues",
-                            style: GoogleFonts.lato(
+                            style: GoogleFonts.pattaya(
                               color: Colors.white,
-                              fontSize: 18
+                              fontSize: 19
                             ),
                           ),
                           const SizedBox(height: 10),
@@ -96,18 +96,22 @@ class HomePage extends StatelessWidget {
                                 fontWeight: FontWeight.bold
                             ),
                           ),
-                          const SizedBox(height: 15),
-                          GestureDetector(
+                          if(data.dues.toInt()!=0)...[
+                            const SizedBox(height: 15),
+                            GestureDetector(
                             onTap: (){
-                              cubit.submitRazorID(context: context, amount: data.dues);
+                              if(data.dues.toInt()!=0){
+                                cubit.submitRazorID(context: context, amount: data.dues);
+                              }
                             },
                             child: Text("Pay Now",
-                              style: GoogleFonts.pattaya(
+                              style: GoogleFonts.lato(
                                 color: Colors.white,
                                 fontSize: 20,
                               ),
                             ),
                           ),
+                          ]
                         ],
                       ),
                     ),
